@@ -1,2 +1,2 @@
 # myfile
-It's used to store my files I made. 😁
+用于存一些自己杂七杂八的东西

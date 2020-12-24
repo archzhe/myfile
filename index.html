@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>axios测试</title>
+
+        <!--引入jquery的bootstrap-->
+        <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <!--引入axios-->
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+        <!--引入react-->
+        <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+        <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+
+        <!--引入babel，解决react的jsx不能使用的问题-->
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    </head>
+    <body>
+        <!-- <img src="/downloads/82969793_p0.png" height="400"/> -->
+        <img src="/downloads/libhv-vs-nginx.png" height="400"/>
+        <div id="axios-test-div"></div>
+        <div id="axios-upload-div">
+            <div class="input-group">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">确定</button>
+                </span>
+            </div>
+        </div>
+        <script type="text/babel">
+            
+            const { useState } = React
+
+            function Header(props) {
+                return <h1 id={props.id}>axios测试</h1>
+            }
+            function Btn(props) {
+                var i = 0;
+
+                function logHave(e) {
+                    e.preventDefault();
+                    i += 1;
+                    console.log("有x"+i)
+                }
+
+                function changeHeader(params) {
+                    console.log("start to axios!")
+                    axios(
+                        "/sleep?t=10",
+                    ).then(function(res) {
+                        console.log(res.data)
+                    })
+                    console.log("changeHeader!")
+                }
+
+                //确定使用的函数
+                if(props.func=="changeHeader"){
+                    var usefunc = changeHeader
+                }else{
+                    var usefunc = logHave
+                }
+
+                return (
+                    <button id={props.id} 
+                    type=" button" 
+                    class="btn btn-info btn-xs" 
+                    onClick={usefunc}>{props.name}</button>
+                    )
+            }
+
+            function FileInput(props) {
+                const [file, setFile] = useState(null);
+                
+                function logFile(event){
+                    setFile(event.target.files[0])
+                    // console.log(file)
+                }
+                function uploadFile() {
+                    var form = new FormData()
+                    form.append("file",file)
+                    axios.post("/upload",form,{Headers:{"Content-Type":"multipart/form-data"}}
+                    ).then(function(res){
+                        console.log(res)
+                    })
+                }
+                return (
+                    <div>
+                    <input 
+                    type="file" 
+                    class="form-control" 
+                    placeholder="上传" 
+                    onChange={logFile}/>
+
+                    <button type="button" 
+                    class="btn btn-info btn-xs" 
+                    onClick={uploadFile}>上传</button>
+
+                    </div>
+                )
+            }
+
+            function AxiosTest(props) {
+                return (
+                    <div>
+                        <Header id="axios-test-header"/>
+                        <FileInput/>
+                        <Btn id="react-test-btn" func="" name="have"/>
+                        <p/>
+                        <Btn id="axios-test-btn" func="changeHeader" name="pong"/>
+                        <p/>
+                        <Btn id="axios-test-btn" func="changeHeader" name="changeHeader"/>
+                    </div>
+                )
+            }
+
+            ReactDOM.render(<AxiosTest/>,document.getElementById('axios-test-div'))
+        </script>
+    </body>
+</html>

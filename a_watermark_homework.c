@@ -82,4 +82,5 @@ int main(int argc, char** argv) {
     get_watermark(a, c);
     printf("\"Extracted watermark\" matrix:\n");
     print(c);
+    return 0;
 }

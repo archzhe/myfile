@@ -34,50 +34,28 @@
         <script type="text/babel">
             
             const { useState } = React
+            const url = "https://60a810d21a96.ngrok.io/"
 
-            function Header(props) {
-                return <h1 id={props.id}>axios测试</h1>
-            }
-            function Btn(props) {
-                var i = 0;
-
-                function logHave(e) {
-                    e.preventDefault();
-                    i += 1;
-                    console.log("有x"+i)
-                }
-
-                function changeHeader(params) {
-                    console.log("start to axios!")
-                    axios(
-                        "/sleep?t=10",
-                    ).then(function(res) {
-                        console.log(res.data)
-                    })
-                    console.log("changeHeader!")
-                }
-
-                //确定使用的函数
-                if(props.func=="changeHeader"){
-                    var usefunc = changeHeader
-                }else{
-                    var usefunc = logHave
+            function Button(props){
+                function Request(){
+                    axios.post(url+props.name).then(function(res){
+                        console.log(res)
+                    });
                 }
 
                 return (
-                    <button id={props.id} 
-                    type=" button" 
+                    <button type="button" 
                     class="btn btn-info btn-xs" 
-                    onClick={usefunc}>{props.name}</button>
-                    )
+                    onClick={Request(props.name)}>{props.text}</button>
+                )
             }
 
-            function FileInput(props) {
-                const [file, setFile] = useState(null);
+            function Input(props) {
+                const [file, setFile] = useState("");
                 
                 function logFile(event){
-                    setFile(event.target.files[0])
-                    // console.log(file)
+                    setFile(event.nativeEvent["data"])
+                    console.log(event.nativeEvent["data"])
                 }
                 function uploadFile() {
                     var form = new FormData()
@@ -89,9 +67,7 @@
                 }
                 return (
                     <div>
-                    <input 
-                    type="file" 
-                    class="form-control" 
+                    <input class="form-control" 
                     placeholder="上传" 
                     onChange={logFile}/>
 
@@ -103,16 +79,12 @@
                 )
             }
 
+
             function AxiosTest(props) {
                 return (
                     <div>
-                        <Header id="axios-test-header"/>
-                        <FileInput/>
-                        <Btn id="react-test-btn" func="" name="have"/>
-                        <p/>
-                        <Btn id="axios-test-btn" func="changeHeader" name="pong"/>
-                        <p/>
-                        <Btn id="axios-test-btn" func="changeHeader" name="changeHeader"/>
+                        <Input/>
+                        <Button name = "login" text = "nbb"/>
                     </div>
                 )
             }

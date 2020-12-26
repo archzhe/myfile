@@ -16,7 +16,7 @@ End license text.
 const int map[10] = {0, 0, 1, 0, 1, 1, 0, 1, 0, 1};
 
 void change_id_into_matrix(const char* s, int (*a)[3]){
-    if(strlen(s) != 8){
+    if(strlen(s) != 10){
         printf("not id!\n");
         return;
     }
